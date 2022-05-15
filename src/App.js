@@ -1,23 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useRef } from "react"
 
 function App() {
+  const [todoList, setTodoList] = useState([]);
+  const inputElement = useRef(null);
+
+  const onAddTodo = () => {
+    setTodoList(
+      todoList.concat(
+        inputElement.current.value
+      )
+    )
+
+    inputElement.current.value = ""
+  }
+
+  const removeTodoItem = (index) => {
+    const newTodoList = JSON.parse(JSON.stringify(todoList))
+    newTodoList.splice(index, 1)
+    setTodoList(newTodoList)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{
+      "height": "100%",
+      "width": "100%",
+      "position": "absolute",
+      "left": "50%",
+      "top": "50%" 
+    }}>
+      <input type="text" ref={inputElement} />
+      <button onClick={onAddTodo}> Add Todo </button>
+      <br />
+      <ul>
+        { todoList.map((todo, i) => {
+          return (
+            <li>
+              {todo}
+              <button onClick={() => removeTodoItem(i)}> X </button>
+              <input type="checkbox" />
+            </li>
+          )
+        })}
+      </ul>
     </div>
   );
 }
